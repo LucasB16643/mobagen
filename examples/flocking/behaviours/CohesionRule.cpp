@@ -7,14 +7,19 @@ Vector2f CohesionRule::computeForce(const std::vector<Boid*>& neighborhood, Boid
   Vector2f cohesionForce = Vector2f::zero();
 
   Vector2 centerMass =  Vector2f::zero();
+  // iterate over the neighborhood
   for (auto n : neighborhood) {
+    //Don't factor the current boid into the vector.
     if (n->getPosition().x == boid->getPosition().x && n->getPosition().y == boid->getPosition().y) {
       continue;
     }
+    //calculate the center of mass by averaging out the positions of all neighbors.
     centerMass += {n->transform.position/neighborhood.size()};
-    Vector2f dir = {centerMass.x - boid->transform.position.x, centerMass.y - boid->transform.position.y};
-    float dist = sqrt(dir.x * dir.x + dir.y * dir.y);
 
+    //use center of mass to find the direction
+    Vector2f dir = {centerMass.x - boid->transform.position.x, centerMass.y - boid->transform.position.y};
+
+//divide direction by radius and return vector
     cohesionForce = dir/boid->getDetectionRadius();
   }
 

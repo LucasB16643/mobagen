@@ -9,11 +9,13 @@ Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Bo
 
   float desiredDistance = desiredMinimalDistance;
 
+  // iterate over the neighborhood
   for (auto n : neighborhood) {
+    //Don't factor the current boid into the vector.
     if (n->getPosition().x == boid->getPosition().x && n->getPosition().y == boid->getPosition().y) {
       continue;
     }
-
+// calculate the distance and direction components of the neighbor and current boid.
     Vector2f dir = {boid->transform.position.x - n->transform.position.x, boid->transform.position.y - n->transform.position.y};
 
     float dist = sqrt(dir.x * dir.x + dir.y * dir.y);
@@ -22,9 +24,10 @@ Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Bo
     if (dist <= desiredDistance) {
       continue;
     }
-
+//calculate normalized vector and strength .
     Vector2f hat = {dir.x/dist, dir.y/dist};
     float strength = 1/dist;
+    //add the x and y components to the separating force vector.
     separatingForce.x += hat.x * strength;
     separatingForce.y += hat.y * strength;
   }
@@ -39,7 +42,7 @@ Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Bo
    }
 
   separatingForce = Vector2f::normalized(separatingForce);
-
+ //return vector.
   return separatingForce;
 }
 
