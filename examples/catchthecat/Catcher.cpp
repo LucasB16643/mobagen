@@ -3,6 +3,11 @@
 
 Point2D Catcher::Move(World* world) {
   auto side = world->getWorldSideSize() / 2;
+
+  std::vector<Point2D> path = generatePath(world); //Selects current path algorithm
+  if (!path.empty()) { //If path is not empty, return the first element in the path
+    return path[0];
+  }
   for (;;) {
     Point2D p = {Random::Range(-side, side), Random::Range(-side, side)};
     auto cat = world->getCat();
